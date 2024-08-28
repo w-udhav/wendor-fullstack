@@ -1,5 +1,8 @@
 import express from "express";
 import sequelize from "./src/config/database.js";
+
+import { errorHandler } from "./src/middlewares/errorHandler.js";
+
 import User from "./src/models/User.js";
 import Category from "./src/models/Category.js";
 import Product from "./src/models/Product.js";
@@ -11,7 +14,10 @@ Inventory.belongsTo(Product, { foreignKey: "product_id" });
 
 const app = express();
 
-app.use(express.json());
+app
+  .use(express.json())
+  .use(express.urlencoded({ extended: true }))
+  .use(errorHandler);
 
 const PORT = 3000;
 
