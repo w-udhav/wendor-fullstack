@@ -1,30 +1,29 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuid } from "uuid";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 const User = sequelize.define(
   "User",
   {
     user_id: {
       type: DataTypes.UUID,
-      defaultValue: uuidv4,
+      defaultValue: () => uuid(),
       primaryKey: true,
     },
-    username: {
-      type: DataTypes.STRING,
+    fullName: {
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    profile_img: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
     role: {
       type: DataTypes.ENUM("admin", "user"),
@@ -37,5 +36,23 @@ const User = sequelize.define(
     timestamps: true,
   }
 );
+
+User.prototype.generateToken = function () {
+  return jwt.sign(
+    { id: this.user_id, email: this.email, fullName: this.fullName },
+    process.env.JWT_SECRET
+  );
+};
+
+User.prototype.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+User.beforeCreate(async (user) => {
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
+});
+
+// hash password before saving:
 
 export default User;

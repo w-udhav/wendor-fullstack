@@ -1,5 +1,5 @@
-import BaseRepository from "./baseRepository";
-import User from "../models/User";
+import BaseRepository from "./baseRepository.js";
+import User from "../models/User.js";
 
 class UserRepository extends BaseRepository {
   constructor() {
@@ -11,15 +11,12 @@ class UserRepository extends BaseRepository {
   }
 
   async findById(id) {
-    return await this.model.findByPk(id, {
-      attributes: { exclude: ["password"] },
-    });
+    return await this.model.findById(id);
   }
 
   async create(data) {
-    return await this.model.create(data, {
-      attributes: { exclude: ["password"] },
-    });
+    const user = await this.model.create(data);
+    return user;
   }
 }
 

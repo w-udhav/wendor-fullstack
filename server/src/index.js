@@ -1,26 +1,35 @@
 import express from "express";
-import sequelize from "./src/config/database.js";
+import sequelize from "./config/database.js";
 
-import { errorHandler } from "./src/middlewares/errorHandler.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
+import routes from "./routes/index.routes.js";
 
-import User from "./src/models/User.js";
-import Category from "./src/models/Category.js";
-import Product from "./src/models/Product.js";
-import Inventory from "./src/models/Inventory.js";
+import Category from "./models/Category.js";
+import Product from "./models/Product.js";
+import Inventory from "./models/Inventory.js";
 
-// Set up associations
+// Setting up associations
 Product.belongsTo(Category, { foreignKey: "category_id" });
 Inventory.belongsTo(Product, { foreignKey: "product_id" });
 
 const app = express();
 
+// Applying middleware
 app
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
   .use(errorHandler);
 
+app.get("/", (req, res) => {
+  res.send("Hello World! You should not be here.");
+});
+
+// Routes
+app.use("/api", routes);
+
 const PORT = 3000;
 
+// Main
 async function main() {
   try {
     await sequelize.authenticate();
@@ -32,5 +41,5 @@ async function main() {
     console.error("Unable to connect to the database:", error);
   }
 }
-
+// sequelize.sync();
 main();

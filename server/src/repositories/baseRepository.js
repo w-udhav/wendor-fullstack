@@ -8,7 +8,7 @@ class BaseRepository {
   }
 
   async findById(id) {
-    return this.model.findByPk(id);
+    return this.model.findById(id);
   }
 
   async create(data) {

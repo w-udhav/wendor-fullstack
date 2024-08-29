@@ -1,72 +1,52 @@
 import { NotFoundError } from "../errors/CustomError.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
 import UserService from "../services/userService.js";
 
 class UserController {
   constructor() {
     this.userService = new UserService();
+
+    // Bind methods to the class instance
+    this.getAllUsers = this.getAllUsers.bind(this);
+    this.getUserById = this.getUserById.bind(this);
+    this.createUser = this.createUser.bind(this);
+    this.verifyUser = this.verifyUser.bind(this);
   }
 
-  async getAllUsers(req, res, next) {
-    try {
-      const users = await this.userService.getAll();
-      res.json(users);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getAllUsers = asyncHandler(async (req, res, next) => {
+    const users = await this.userService.getAll();
+    res.json(users);
+  });
 
-  async getUserById(req, res, next) {
-    try {
-      const user = await this.userService.getById(req.params.id);
-      if (!user) {
-        throw new NotFoundError("User not found");
-      }
-      res.json(user);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getUserById = asyncHandler(async (req, res, next) => {
+    const user = await this.userService.getById(req.params.id);
+    if (!user) throw new NotFoundError("User not found");
+    res.json(user);
+  });
 
-  async createUser(req, res, next) {
-    try {
-      const user = await this.userService.create(req.body);
-      res.status(201).json(user);
-    } catch (error) {
-      if (error.name === "SequelizeValidationError") {
-        next(new ValidationError(error.message));
-      } else {
-        next(error);
-      }
-    }
-  }
+  createUser = asyncHandler(async (req, res, next) => {
+    const { user, token } = await this.userService.create(req.body);
+    res.status(201).json({ token, user });
+  });
 
-  async updateUser(req, res, next) {
-    try {
-      const user = await this.userService.update(req.params.id, req.body);
-      if (!user) {
-        throw new NotFoundError("User not found");
-      }
-      res.json(user);
-    } catch (error) {
-      if (error.name === "SequelizeValidationError") {
-        next(new ValidationError(error.message));
-      } else {
-        next(error);
-      }
-    }
-  }
+  verifyUser = asyncHandler(async (req, res, next) => {
+    const { email, password } = req.body;
+    const { user, token } = await this.userService.loginUser(email, password);
+    if (!user) throw new NotFoundError("User not found");
+    res.status(200).json({ token, user });
+  });
 
-  async deleteUser(req, res, next) {
-    try {
-      const user = await this.userService.delete(req.params.id);
-      if (!user) {
-        throw new NotFoundError("User not found");
-      }
-      res.status(204).end();
-    } catch (error) {
-      next(error);
-    }
-  }
+  updateUser = asyncHandler(async (req, res, next) => {
+    const user = await this.userService.update(req.params.id, req.body);
+    if (!user) throw new NotFoundError("User not found");
+    res.json(user);
+  });
+
+  deleteUser = asyncHandler(async (req, res, next) => {
+    const user = await this.userService.delete(req.params.id);
+    if (!user) throw new NotFoundError("User not found");
+    res.status(204).end();
+  });
 }
 
 export default UserController;

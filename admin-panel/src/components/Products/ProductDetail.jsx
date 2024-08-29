@@ -90,7 +90,6 @@ export default function ProductDetail({ product, clearSelected }) {
           <label htmlFor="name" className="text-zinc-400">
             Image
           </label>
-          <Input2 type="text" id="name" value={product.name} />
         </div>
       </div>
     </div>

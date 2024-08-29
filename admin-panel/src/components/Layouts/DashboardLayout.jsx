@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { navLinks } from "@/utils/constants";
 import { Link } from "react-router-dom";
+import logo from "@/assets/logo.png";
 
 export default function DashboardLayout({ children }) {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -13,12 +14,16 @@ export default function DashboardLayout({ children }) {
         <div className="max-w-xs w-full h-full p-4 border-r border-zinc-800 flex flex-col gap-3">
           {/* Top */}
           <div className="flex gap-3 items-center pb-4 border-b border-zinc-800">
-            <div className="text-white bg-gray rounded-xl px-3 py-2 text-sm">
-              Logo
-            </div>
-            <div className="text-white bg-gray rounded-xl px-3 py-2 text-sm font-semibold">
+            <a
+              href="https://wendor.in/"
+              target="_blank"
+              className="text-white bg-gray rounded-xl px-3 py-2 text-sm"
+            >
+              <img src={logo} alt="logo" className="w-6" />
+            </a>
+            <h3 className="text-white bg-gray rounded-xl px-3 py-2 text-sm font-semibold">
               Admin
-            </div>
+            </h3>
           </div>
           {/* Lower */}
           <div className="flex flex-col gap-4">

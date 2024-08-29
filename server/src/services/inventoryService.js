@@ -6,6 +6,12 @@ class InventoryService extends BaseService {
     const inventoryRepository = new InventoryRepository();
     super(inventoryRepository);
   }
+
+  async getAll() {
+    return this.repository.getAll();
+  }
+
+  async delete(id) {}
 }
 
 export default InventoryService;

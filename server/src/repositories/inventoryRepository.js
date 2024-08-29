@@ -1,5 +1,5 @@
-import BaseRepository from "./baseRepository";
-import Inventory from "../models/Inventory";
+import BaseRepository from "./baseRepository.js";
+import Inventory from "../models/Inventory.js";
 
 class InventoryRepository extends BaseRepository {
   constructor() {
