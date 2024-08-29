@@ -1,3 +1,6 @@
+import { NotFoundError } from "../errors/CustomError.js";
+import { sendResponseWithoutPassword } from "../utils/server.utils.js";
+
 class BaseService {
   constructor(repository) {
     this.repository = repository;
@@ -7,8 +10,10 @@ class BaseService {
     return this.repository.findAll(options);
   }
 
-  async getById(id) {
-    return this.repository.findById(id);
+  async getUserById(id) {
+    const user = await this.repository.findById(id);
+    if (!user) throw new NotFoundError();
+    return sendResponseWithoutPassword(user);
   }
 
   async create(data) {

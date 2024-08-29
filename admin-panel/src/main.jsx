@@ -3,11 +3,14 @@ import App from "./App.jsx";
 import "./index.css";
 
 import { NextUIProvider } from "@nextui-org/react";
+import { AuthContextProvider } from "./context/AuthContext.js";
 
 createRoot(document.getElementById("root")).render(
   <NextUIProvider>
-    <main className="dark text-foreground bg-background">
-      <App />
-    </main>
+    <AuthContextProvider>
+      <main className="dark text-foreground bg-background">
+        <App />
+      </main>
+    </AuthContextProvider>
   </NextUIProvider>
 );

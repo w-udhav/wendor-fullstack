@@ -19,8 +19,7 @@ class UserController {
   });
 
   getUserById = asyncHandler(async (req, res, next) => {
-    const user = await this.userService.getById(req.params.id);
-    if (!user) throw new NotFoundError("User not found");
+    const user = await this.userService.getUserById(req.params.id);
     res.json(user);
   });
 
@@ -32,20 +31,14 @@ class UserController {
   verifyUser = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
     const { user, token } = await this.userService.loginUser(email, password);
-    if (!user) throw new NotFoundError("User not found");
     res.status(200).json({ token, user });
   });
 
-  updateUser = asyncHandler(async (req, res, next) => {
-    const user = await this.userService.update(req.params.id, req.body);
-    if (!user) throw new NotFoundError("User not found");
-    res.json(user);
-  });
+  updateUser = asyncHandler(async (req, res, next) => {});
 
   deleteUser = asyncHandler(async (req, res, next) => {
-    const user = await this.userService.delete(req.params.id);
-    if (!user) throw new NotFoundError("User not found");
-    res.status(204).end();
+    await this.userService.deleteUser(req.params.id);
+    res.status(204).json({ message: "User deleted successfully" });
   });
 }
 

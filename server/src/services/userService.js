@@ -51,6 +51,14 @@ class UserService extends BaseService {
       throw new InternalServerError(error.message);
     }
   }
+
+  async deleteUser(id) {
+    try {
+      await this.userRepository.delete(id);
+    } catch (error) {
+      throw new InternalServerError(error.message);
+    }
+  }
 }
 
 export default UserService;

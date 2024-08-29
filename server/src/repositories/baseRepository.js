@@ -1,14 +1,20 @@
+import User from "../models/User.js";
+
 class BaseRepository {
   constructor(model) {
     this.model = model;
   }
 
   async findAll() {
-    return this.model.findAll();
+    return this.model.findAll({ where: { role: "user" } });
   }
 
   async findById(id) {
-    return this.model.findById(id);
+    return await User.findOne({ where: { user_id: id } });
+  }
+
+  async findByEmail(email) {
+    return await User.findOne({ where: { email } });
   }
 
   async create(data) {
@@ -24,9 +30,7 @@ class BaseRepository {
   }
 
   async delete(id) {
-    const record = await this.findById(id);
-    if (!record) return null;
-    return record.destroy();
+    await this.model.destroy({ where: { user_id: id } });
   }
 }
 

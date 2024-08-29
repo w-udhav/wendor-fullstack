@@ -1,7 +1,9 @@
 import React from "react";
+import Loader from "./Loader";
 
 export default function Button({
   children,
+  isLoading,
   onClick,
   disabled = false,
   className,
@@ -12,7 +14,7 @@ export default function Button({
       onClick={onClick}
       disabled={disabled}
     >
-      {children}
+      {isLoading ? <Loader /> : children}
     </button>
   );
 }
