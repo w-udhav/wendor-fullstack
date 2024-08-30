@@ -1,7 +1,6 @@
 import InventoryDetail from "@/components/Inventory/InventoryDetail";
 import InventoryTable from "@/components/Inventory/InventoryTable";
 import AddInventoryModal from "@/components/Modal/AddInventoryModal";
-import ProductDetail from "@/components/Products/ProductDetail";
 import { axiosInstance } from "@/utils/axiosInstance";
 import React, { useEffect } from "react";
 
@@ -41,11 +40,11 @@ export default function Inventory() {
         {/* Top */}
         <div className="p-3 px-4 pl-0 w-full flex items-center justify-between border-b border-zinc-800 pb-4">
           <div>
-            <AddInventoryModal />
+            <AddInventoryModal refreshData={refreshData} />
           </div>
           <div className="flex items-center gap-2">
             <h3 className="text-zinc-400">Count: </h3>
-            <p className="font-semibold">13</p>
+            <p className="font-semibold">{inventory?.length}</p>
           </div>
         </div>
 

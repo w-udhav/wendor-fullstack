@@ -1,4 +1,5 @@
-export const baseURL = "http://localhost:3000/api";
+// export const baseURL = "http://localhost:3000/api";
+export const baseURL = "https://wendor-server.prathammehta.xyz/api";
 
 export const categories = [
   "Beverages",

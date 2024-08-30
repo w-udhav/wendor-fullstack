@@ -19,12 +19,10 @@ const CartContextProvider = ({ children }) => {
   }, [cart]);
 
   const updateCart = (id, quantity) => {
-    console.log(id, quantity);
     const updatedCart = cart
       .map((item) => {
         if (item.productId === id) {
           const newQuantity = item.quantity + quantity;
-          console.log(newQuantity);
           if (newQuantity > 0) {
             return { ...item, quantity: newQuantity };
           }

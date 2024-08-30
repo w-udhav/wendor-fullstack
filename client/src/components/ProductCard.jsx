@@ -9,8 +9,6 @@ export default function ProductCard({ data }) {
 
   const cartItem = cart.find((item) => item.productId === data.productId);
 
-  console.log(cart);
-
   const handleAddToCart = () => {
     addToCart(data);
   };

@@ -38,7 +38,7 @@ export default function Products() {
           </div>
           <div className="flex items-center gap-2">
             <h3 className="text-zinc-400">Count: </h3>
-            <p className="font-semibold">13</p>
+            <p className="font-semibold">{products?.length}</p>
           </div>
         </div>
 
