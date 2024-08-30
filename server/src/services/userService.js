@@ -1,5 +1,5 @@
 import BaseService from "./baseService.js";
-import UserRepository from "../repositories/UserRepository.js";
+import UserRepository from "../repositories/userRepository.js";
 import {
   AuthenticationError,
   CustomError,
