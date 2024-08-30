@@ -11,8 +11,6 @@ import Products from "@/pages/Dashboard/Products";
 import Inventory from "@/pages/Dashboard/Inventory";
 
 const AppRoutes = () => {
-  const isAuthenticated = false;
-
   return (
     <Router>
       <Routes>

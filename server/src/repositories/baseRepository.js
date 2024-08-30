@@ -23,7 +23,6 @@ class BaseRepository {
     if (!record) {
       throw new NotFoundError("Record not found");
     }
-    console.log(record);
     return await record.update(data);
   }
 
