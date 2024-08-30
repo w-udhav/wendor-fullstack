@@ -39,7 +39,7 @@ const User = sequelize.define(
 
 User.prototype.generateToken = function () {
   return jwt.sign(
-    { id: this.user_id, email: this.email, fullName: this.fullName },
+    { id: this.id, email: this.email, fullName: this.fullName },
     process.env.JWT_SECRET
   );
 };

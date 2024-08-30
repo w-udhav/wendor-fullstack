@@ -8,12 +8,26 @@ class InventoryRepository extends BaseRepository {
   constructor() {
     super(Inventory);
   }
-
   async findByProductId(id) {
-    return await Inventory.findOne({ where: { productId: id } });
+    return await Inventory.findOne({
+      attributes: [
+        "id",
+        "productId",
+        "quantity",
+        [sequelize.col("product.price"), "productPrice"],
+      ],
+      include: [
+        {
+          model: Product,
+          as: "product",
+          attributes: [],
+        },
+      ],
+      where: { productId: id },
+    });
   }
 
-  async getAllProducts() {
+  async getAllProducts(category) {
     return await Inventory.findAll({
       attributes: [
         ["id", "inventoryId"],
@@ -29,6 +43,9 @@ class InventoryRepository extends BaseRepository {
           model: Product,
           as: "product",
           attributes: [],
+          where: {
+            ...(category && { category }),
+          },
         },
       ],
       group: [

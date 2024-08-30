@@ -13,14 +13,20 @@ router.get(
 );
 router.post(
   "/create",
+  verifyUser,
+  isAdmin,
   inventoryController.createInventory.bind(inventoryController)
 );
 router.put(
   "/:id",
+  verifyUser,
+  isAdmin,
   inventoryController.updateInventory.bind(inventoryController)
 );
 router.delete(
   "/:id",
+  verifyUser,
+  isAdmin,
   inventoryController.deleteInventory.bind(inventoryController)
 );
 

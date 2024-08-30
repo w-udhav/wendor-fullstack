@@ -31,8 +31,12 @@ class InventoryService extends BaseService {
     }
   }
 
-  async getAllProducts() {
-    return await this.inventoryRepository.getAllProducts();
+  async getProductById(id) {
+    return await this.inventoryRepository.findByProductId(id);
+  }
+
+  async getAllProducts(category) {
+    return await this.inventoryRepository.getAllProducts(category);
   }
 
   async deleteProductInventory(id) {

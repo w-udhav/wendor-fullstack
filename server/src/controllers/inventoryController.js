@@ -1,5 +1,4 @@
 import inventoryService from "../services/inventoryService.js";
-import { NotFoundError, ValidationError } from "../errors/CustomError.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 
 class InventoryController {
@@ -15,7 +14,8 @@ class InventoryController {
   }
 
   getAllProductsInInventory = asyncHandler(async (req, res, next) => {
-    const inventory = await this.inventoryService.getAllProducts();
+    const category = req.query.category && req.query.category !== "all" ? (req.query.category) : undefined;
+    const inventory = await this.inventoryService.getAllProducts(category);
     res.json(inventory);
   });
 

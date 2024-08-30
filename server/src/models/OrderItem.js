@@ -1,6 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 import { v4 as uuid } from "uuid";
+import Order from "./Order.js";
+import Product from "./Product.js";
 
 const OrderItem = sequelize.define(
   "OrderItem",
@@ -23,8 +25,8 @@ const OrderItem = sequelize.define(
       allowNull: false,
     },
     purchasePrice: {
-      type: DataTypes.INTEGER,
-      allowNull: falsel,
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
     },
   },
   {
@@ -32,5 +34,11 @@ const OrderItem = sequelize.define(
     timestamps: true,
   }
 );
+
+OrderItem.belongsTo(Product, { foreignKey: 'productId', as: 'product' });
+OrderItem.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
+Product.hasMany(OrderItem, { foreignKey: 'productId', as: 'orderItems' });
+Order.hasMany(OrderItem, { foreignKey: 'orderId', as: 'orderItems' });
+
 
 export default OrderItem;

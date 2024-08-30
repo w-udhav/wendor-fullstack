@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import sequelize from "../config/database.js";
+import { DataTypes } from "sequelize";
 
 const Order = sequelize.define(
   "Order",
@@ -23,5 +24,7 @@ const Order = sequelize.define(
     timestamps: true,
   }
 );
+
+
 
 export default Order;

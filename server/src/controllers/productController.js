@@ -1,5 +1,4 @@
 import productService from "../services/productService.js";
-import { NotFoundError, ValidationError } from "../errors/CustomError.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 
 class ProductController {
