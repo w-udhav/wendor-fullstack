@@ -8,7 +8,7 @@ export default function ProductCardCollection({ title, products = [] }) {
       <SectionHeading title={title} />
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 w-full">
         {products.map((product) => (
-          <ProductCard key={product.id} data={product} />
+          <ProductCard key={product.inventoryId} data={product} />
         ))}
       </div>
     </div>
