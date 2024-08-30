@@ -6,8 +6,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import Home from "@/pages/Home";
 import MyOrders from "@/pages/MyOrders";
 import Products from "@/pages/Products";
-import Navbar from "@/components/Navbar";
 import Layout from "@/components/Layout/Layout";
+import Cart from "@/pages/Cart";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +15,7 @@ const AppRoutes = () => {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/myorders" element={<MyOrders />} />
             <Route path="/products" element={<Products />} />

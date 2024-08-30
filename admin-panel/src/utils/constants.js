@@ -25,10 +25,7 @@ export const categories = [
   "Cookies",
   "Energy Drinks",
   "Gum",
-  "Healthy Snacks",
-  "Nuts",
   "Pastries",
   "Protein Bars",
   "Sandwiches",
-  "Snacks",
 ];
