@@ -5,16 +5,16 @@ import { v4 as uuidv4 } from "uuid";
 const Inventory = sequelize.define(
   "Inventory",
   {
-    inventory_id: {
+    id: {
       type: DataTypes.UUID,
-      defaultValue: uuidv4,
+      defaultValue: () => uuidv4(),
       primaryKey: true,
     },
-    product_id: {
+    productId: {
       type: DataTypes.UUID,
       references: {
-        model: "products", // Use table name here
-        key: "product_id",
+        model: "products",
+        key: "id",
       },
     },
     quantity: {

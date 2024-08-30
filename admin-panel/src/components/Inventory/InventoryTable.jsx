@@ -10,25 +10,26 @@ import {
 } from "@nextui-org/react";
 const columns = [
   {
-    key: "id",
+    key: "inventoryId",
     label: "ID",
   },
   {
-    key: "name",
+    key: "productName",
     label: "NAME",
   },
   {
-    key: "price",
+    key: "productPrice",
     label: "PRICE",
   },
   {
-    key: "category",
-    label: "CATEGORY",
+    key: "quantity",
+    label: "QUANTITY",
   },
 ];
 
-export default function ProductTable({ rowData, handleSelect }) {
+export default function InventoryTable({ rowData, handleSelect }) {
   const [isLoading, setIsLoading] = React.useState(true);
+  const [selectedInventory, setSelectedInventory] = React.useState(null);
 
   const handleRowClick = (product) => {
     handleSelect(product);

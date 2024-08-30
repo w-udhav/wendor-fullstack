@@ -1,58 +1,37 @@
 import productService from "../services/productService.js";
 import { NotFoundError, ValidationError } from "../errors/CustomError.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
 
 class ProductController {
   constructor() {
     this.productService = new productService();
+
+    // Bind methods to the class instance
+    this.getAllProducts = this.getAllProducts.bind(this);
+    this.createProduct = this.createProduct.bind(this);
+    this.updateProduct = this.updateProduct.bind(this);
+    this.deleteProduct = this.deleteProduct.bind(this);
   }
 
-  async getAllProducts(req, res, next) {
-    try {
-      const products = await this.productService.getAll();
-      res.json(products);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getAllProducts = asyncHandler(async (req, res, next) => {
+    const products = await this.productService.getAll();
+    res.status(200).json(products);
+  });
 
-  async createProduct(req, res, next) {
-    try {
-      const product = await this.productService.create(req.body);
-      res.status(201).json(product);
-    } catch (error) {
-      if (error.name === "SequelizeValidationError") {
-        next(new ValidationError(error.message));
-      } else {
-        next(error);
-      }
-    }
-  }
+  createProduct = asyncHandler(async (req, res, next) => {
+    const product = await this.productService.create(req.body);
+    res.status(201).json({ data: product });
+  });
 
-  async updateProduct(req, res, next) {
-    try {
-      const product = await this.productService.update(req.params.id, req.body);
-      if (!product) {
-        throw new NotFoundError("Product not found");
-      }
-      res.json(product);
-    } catch (error) {
-      if (error.name === "SequelizeValidationError") {
-        next(new ValidationError(error.message));
-      } else {
-        next(error);
-      }
-    }
-  }
+  updateProduct = asyncHandler(async (req, res, next) => {
+    const product = await this.productService.update(req.params.id, req.body);
+    res.status(200).json({ data: product });
+  });
 
-  async deleteProduct(req, res, next) {
-    try {
-      const product = await this.productService.delete(req.params.id);
-      if (!product) {
-        throw new NotFoundError("Product not found");
-      }
-      res.status(204).end();
-    } catch (error) {
-      next(error);
-    }
-  }
+  deleteProduct = asyncHandler(async (req, res, next) => {
+    await this.productService.delete(req.params.id);
+    res.status(204).json({ message: "Product deleted successfully" });
+  });
 }
+
+export default ProductController;

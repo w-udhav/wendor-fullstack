@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
 import ProductTable from "@/components/Products/ProductTable";
 import ProductDetail from "@/components/Products/ProductDetail";
+import { axiosInstance } from "@/utils/axiosInstance";
+import AddProductModal from "@/components/Modal/AddProductModal";
+import { fetchProducts } from "@/utils/commonFunctions";
 
 export default function Products() {
   const [selectedProduct, setSelectedProduct] = React.useState(null);
+  const [products, setProducts] = React.useState([]);
 
   const handleSelect = (product) => {
     setSelectedProduct(product);
@@ -16,7 +20,13 @@ export default function Products() {
     setSelectedProduct(null);
   };
 
-  console.log(selectedProduct);
+  const refreshData = async () => {
+    fetchProducts(setProducts);
+  };
+
+  useEffect(() => {
+    fetchProducts(setProducts);
+  }, []);
 
   return (
     <div className="w-full h-full max-h-screen overflow-hidden flex">
@@ -24,9 +34,7 @@ export default function Products() {
         {/* Top */}
         <div className="p-3 px-4 pl-0 w-full flex items-center justify-between border-b border-zinc-800 pb-4">
           <div>
-            <Button className="text-sm flex items-center justify-center py-2">
-              <Icon name="add" className="font-medium" /> Add Product
-            </Button>
+            <AddProductModal refreshData={refreshData} />
           </div>
           <div className="flex items-center gap-2">
             <h3 className="text-zinc-400">Count: </h3>
@@ -36,13 +44,14 @@ export default function Products() {
 
         {/* Main */}
         <div className="w-full overflow-hidden relative pl-0 p-3 rounded-2xl">
-          <ProductTable handleSelect={handleSelect} />
+          <ProductTable rowData={products} handleSelect={handleSelect} />
         </div>
       </div>
 
       <div className="w-1/3 h-full bg-black">
         {selectedProduct && (
           <ProductDetail
+            refreshData={refreshData}
             product={selectedProduct}
             clearSelected={clearSelected}
           />

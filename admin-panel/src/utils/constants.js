@@ -19,12 +19,16 @@ export const navLinks = [
 ];
 
 export const categories = [
-  "Electronics",
-  "Clothing",
-  "clothing",
-  "Furniture",
-  "Food",
-  "Books",
-  "Stationary",
-  "stationary",
+  "Beverages",
+  "Candy",
+  "Chips",
+  "Cookies",
+  "Energy Drinks",
+  "Gum",
+  "Healthy Snacks",
+  "Nuts",
+  "Pastries",
+  "Protein Bars",
+  "Sandwiches",
+  "Snacks",
 ];

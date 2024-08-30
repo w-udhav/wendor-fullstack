@@ -1,20 +1,17 @@
-import User from "../models/User.js";
+import { NotFoundError } from "../errors/CustomError.js";
 
 class BaseRepository {
   constructor(model) {
     this.model = model;
   }
 
-  async findAll() {
-    return this.model.findAll({ where: { role: "user" } });
+  async findAll(options = {}) {
+    return this.model.findAll(options);
   }
 
   async findById(id) {
-    return await User.findOne({ where: { user_id: id } });
-  }
-
-  async findByEmail(email) {
-    return await User.findOne({ where: { email } });
+    console.log(id);
+    return await this.model.findOne({ where: { id } });
   }
 
   async create(data) {
@@ -22,15 +19,16 @@ class BaseRepository {
   }
 
   async update(id, data) {
-    const record = await this.findById(id);
+    const record = await this.model.findByPk(id);
     if (!record) {
-      throw new Error("Record not found");
+      throw new NotFoundError("Record not found");
     }
-    return record.update(data);
+    console.log(record);
+    return await record.update(data);
   }
 
   async delete(id) {
-    await this.model.destroy({ where: { user_id: id } });
+    await this.model.destroy({ where: { id } });
   }
 }
 

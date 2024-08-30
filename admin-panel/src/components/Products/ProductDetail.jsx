@@ -1,19 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../Button";
 import Icon from "../Icon";
 import Input2 from "../Input2";
 
 import { categories } from "@/utils/constants";
+import { axiosInstance } from "@/utils/axiosInstance";
+import { Select, SelectItem } from "@nextui-org/react";
 
-export default function ProductDetail({ product, clearSelected }) {
-  const [selectedCategory, setSelectedCategory] = useState(
-    product?.category || "Select Category"
-  );
-  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+export default function ProductDetail({ refreshData, product, clearSelected }) {
+  const { id, name, price, category, display_img } = product;
 
-  const handleCategorySelection = (category) => {
-    setSelectedCategory(category);
-    setIsCategoryOpen(false);
+  const [productName, setProductName] = useState(name);
+  const [productPrice, setProductPrice] = useState(price);
+  const [productCategory, setProductCategory] = useState(category);
+  const [productImage, setProductImage] = useState(display_img);
+
+  useEffect(() => {
+    setProductName(name);
+    setProductPrice(price);
+    setProductCategory(category);
+    setProductImage(display_img);
+  }, [product]);
+
+  const handleSave = async () => {
+    try {
+      const res = await axiosInstance.put(`/product/${id}`, {
+        name: productName,
+        price: productPrice,
+        category: productCategory,
+        display_img: productImage,
+      });
+      if (res.status === 200) {
+        console.log("Product updated successfully");
+        refreshData();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -28,7 +51,12 @@ export default function ProductDetail({ product, clearSelected }) {
           </button>
         </div>
         <div className="flex items-center gap-2">
-          <Button className="text-sm flex items-center py-2 ">Save</Button>
+          <Button
+            className="text-sm flex items-center py-2"
+            onClick={handleSave}
+          >
+            Save
+          </Button>
         </div>
       </div>
 
@@ -38,7 +66,12 @@ export default function ProductDetail({ product, clearSelected }) {
           <label htmlFor="name" className="text-zinc-400">
             Name
           </label>
-          <Input2 type="text" id="name" value={product?.name} />
+          <Input2
+            type="text"
+            id="name"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+          />
         </div>
 
         {/* Price */}
@@ -46,7 +79,12 @@ export default function ProductDetail({ product, clearSelected }) {
           <label htmlFor="price" className="text-zinc-400">
             Price
           </label>
-          <Input2 type="number" id="price" value={product?.height} />
+          <Input2
+            type="number"
+            id="price"
+            value={productPrice}
+            onChange={(e) => setProductPrice(e.target.value)}
+          />
         </div>
 
         {/* Category */}
@@ -55,33 +93,20 @@ export default function ProductDetail({ product, clearSelected }) {
             Category
           </label>
           <div className="relative">
-            <button
-              onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-              className="rounded-xl p-4 py-3 outline-none bg-gray hover:bg-zinc-800 transition-all w-full text-left"
+            <Select
+              label={category}
+              variant="flat"
+              className="w-full"
+              name="category"
+              value={productCategory}
+              onChange={(e) => setProductCategory(e.target.value)}
             >
-              {selectedCategory}
-            </button>
-            {isCategoryOpen && (
-              <div className="absolute top-10 bg-zinc-900 w-[12rem] max-h-[12rem] overflow-auto p-2 rounded-2xl flex flex-col text-sm shadow-md">
-                {categories &&
-                  categories.map((category, index) => (
-                    <button
-                      onClick={() => handleCategorySelection(category)}
-                      className={`text-left p-2 px-3 rounded-lg hover:bg-zinc-800 transition-all flex items-center justify-between ${
-                        selectedCategory === category ? "bg-zinc-800" : ""
-                      }`}
-                    >
-                      <span>{category}</span>
-                      <span className="flex justify-center items-center">
-                        <Icon
-                          name={category === selectedCategory ? "check" : ""}
-                          className="text-lg font-light"
-                        />
-                      </span>
-                    </button>
-                  ))}
-              </div>
-            )}
+              {categories.map((cat, index) => (
+                <SelectItem value={cat} key={cat}>
+                  {cat}
+                </SelectItem>
+              ))}
+            </Select>
           </div>
         </div>
 
@@ -90,6 +115,18 @@ export default function ProductDetail({ product, clearSelected }) {
           <label htmlFor="name" className="text-zinc-400">
             Image
           </label>
+          <Input2
+            type="text"
+            id="display_img"
+            value={productImage}
+            onChange={(e) => setProductImage(e.target.value)}
+          />
+          <Button
+            className="text-sm flex items-center justify-center py-2"
+            disabled={true}
+          >
+            <Icon name="add" className="font-medium" /> Upload Image
+          </Button>
         </div>
       </div>
     </div>

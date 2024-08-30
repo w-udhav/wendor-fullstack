@@ -1,12 +1,30 @@
 import { authReducer, initialState } from "@/store/authReducer";
-import React, { createContext, useReducer, useContext, useMemo } from "react";
+import React, {
+  createContext,
+  useReducer,
+  useMemo,
+  useState,
+  useContext,
+} from "react";
 
-export const AuthContext = createContext();
+export const AuthContext = createContext({
+  loading: true,
+  setLoading: () => {},
+  user: null,
+  token: null,
+  isAuthenticated: false,
+  login: () => {},
+  logout: () => {},
+});
 
 export default function AuthContextProvider({ children }) {
-  const initState = localStorage.get("token")
-    ? JSON.parse(localStorage.getItem("admin"))
-    : initialState;
+  const initState = {
+    user: localStorage.getItem("admin")
+      ? JSON.parse(localStorage.getItem("admin"))
+      : null,
+    token: localStorage.getItem("token") || null,
+    isAuthenticated: !!localStorage.getItem("token"),
+  };
 
   const [state, dispatch] = useReducer(authReducer, initState);
   const [loading, setLoading] = useState(true);
@@ -28,9 +46,9 @@ export default function AuthContextProvider({ children }) {
     () => ({
       loading,
       setLoading,
-      user: state.user,
-      token: state.token,
-      isAuthenticated: state.isAuthenticated,
+      user: state?.user,
+      token: state?.token,
+      isAuthenticated: state?.isAuthenticated,
       login,
       logout,
     }),
@@ -42,4 +60,12 @@ export default function AuthContextProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 }

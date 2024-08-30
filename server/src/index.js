@@ -1,16 +1,9 @@
 import express from "express";
 import sequelize from "./config/database.js";
+import cors from "cors";
 
 import { errorHandler } from "./middlewares/errorHandler.js";
 import routes from "./routes/index.routes.js";
-
-import Category from "./models/Category.js";
-import Product from "./models/Product.js";
-import Inventory from "./models/Inventory.js";
-
-// Setting up associations
-Product.belongsTo(Category, { foreignKey: "category_id" });
-Inventory.belongsTo(Product, { foreignKey: "product_id" });
 
 const app = express();
 
@@ -18,6 +11,12 @@ const app = express();
 app
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
+  .use(
+    cors({
+      origin: ["http://localhost:5173", "http://localhost:5174"],
+      credentials: true,
+    })
+  )
   .use(errorHandler);
 
 app.get("/", (req, res) => {

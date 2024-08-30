@@ -7,7 +7,7 @@ class BaseService {
   }
 
   async getAll(options = {}) {
-    return this.repository.findAll(options);
+    return await this.repository.findAll(options);
   }
 
   async getUserById(id) {
@@ -17,15 +17,15 @@ class BaseService {
   }
 
   async create(data) {
-    return this.repository.create(data);
+    return await this.repository.create(data);
   }
 
   async update(id, data) {
-    return this.repository.update(id, data);
+    return await this.repository.update(id, data);
   }
 
   async delete(id) {
-    return this.repository.delete(id);
+    return await this.repository.delete(id);
   }
 }
 

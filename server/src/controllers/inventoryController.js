@@ -1,73 +1,51 @@
 import inventoryService from "../services/inventoryService.js";
 import { NotFoundError, ValidationError } from "../errors/CustomError.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
 
 class InventoryController {
   constructor() {
     this.inventoryService = new inventoryService();
+
+    // Bind methods to the class instance
+    this.getAllProductsInInventory = this.getAllProductsInInventory.bind(this);
+    this.getInventoryById = this.getInventoryById.bind(this);
+    this.createInventory = this.createInventory.bind(this);
+    this.updateInventory = this.updateInventory.bind(this);
+    this.deleteInventory = this.deleteInventory.bind(this);
   }
 
-  async getAllInventory(req, res, next) {
-    try {
-      const inventory = await this.inventoryService.getAll();
-      res.json(inventory);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getAllProductsInInventory = asyncHandler(async (req, res, next) => {
+    const inventory = await this.inventoryService.getAllProducts();
+    res.json(inventory);
+  });
 
-  async getInventoryById(req, res, next) {
-    try {
-      const inventory = await this.inventoryService.getById(req.params.id);
-      if (!inventory) {
-        throw new NotFoundError("Inventory item not found");
-      }
-      res.json(inventory);
-    } catch (error) {
-      next(error);
-    }
-  }
+  getInventoryByProductId = asyncHandler(async (req, res, next) => {
+    const inventory = await this.inventoryService.getByProductId(req.params.id);
+    res.json(inventory);
+  });
 
-  async createInventory(req, res, next) {
-    try {
-      const inventory = await this.inventoryService.create(req.body);
-      res.status(201).json(inventory);
-    } catch (error) {
-      if (error.name === "SequelizeValidationError") {
-        next(new ValidationError(error.message));
-      } else {
-        next(error);
-      }
-    }
-  }
+  getInventoryById = asyncHandler(async (req, res, next) => {
+    const inventory = await this.inventoryService.getById(req.params.id);
+    res.json(inventory);
+  });
 
-  async updateInventory(req, res, next) {
-    try {
-      const inventory = await this.inventoryService.update(
-        req.params.id,
-        req.body
-      );
-      if (!inventory) {
-        throw new NotFoundError("Inventory item not found");
-      }
-      res.json(inventory);
-    } catch (error) {
-      if (error.name === "SequelizeValidationError") {
-        next(new ValidationError(error.message));
-      } else {
-        next(error);
-      }
-    }
-  }
+  createInventory = asyncHandler(async (req, res, next) => {
+    const inventory = await this.inventoryService.create(req.body);
+    res.status(201).json({ data: inventory });
+  });
 
-  async deleteInventory(req, res, next) {
-    try {
-      const inventory = await this.inventoryService.delete(req.params.id);
-      if (!inventory) {
-        throw new NotFoundError("Inventory item not found");
-      }
-      res.status(204).end();
-    } catch (error) {
-      next(error);
-    }
-  }
+  updateInventory = asyncHandler(async (req, res, next) => {
+    const inventory = await this.inventoryService.update(
+      req.params.id,
+      req.body
+    );
+    res.json({ data: inventory });
+  });
+
+  deleteInventory = asyncHandler(async (req, res, next) => {
+    await this.inventoryService.deleteProductInventory(req.params.id);
+    res.status(204).json({ message: "Inventory item deleted successfully" });
+  });
 }
+
+export default InventoryController;
