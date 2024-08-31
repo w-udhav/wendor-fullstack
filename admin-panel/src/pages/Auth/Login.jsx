@@ -3,6 +3,7 @@ import Input from "@/components/Input";
 import { useAuth } from "@/context/AuthContext";
 import { axiosInstance } from "@/utils/axiosInstance";
 import React from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -32,9 +33,10 @@ export default function Login() {
       if (res.status === 200) {
         login(res?.data?.user, res?.data?.token);
         navigate("/dashboard");
-        console.log("success");
+        toast.success("Login successful");
       }
     } catch (error) {
+      toast.error(error?.response?.data?.message || "An error occurred");
       console.log(error);
     }
   };

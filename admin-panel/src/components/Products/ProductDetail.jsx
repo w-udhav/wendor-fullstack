@@ -6,6 +6,7 @@ import Input2 from "../Input2";
 import { categories } from "@/utils/constants";
 import { axiosInstance } from "@/utils/axiosInstance";
 import { Select, SelectItem } from "@nextui-org/react";
+import toast from "react-hot-toast";
 
 export default function ProductDetail({ refreshData, product, clearSelected }) {
   const { id, name, price, category, display_img } = product;
@@ -31,10 +32,12 @@ export default function ProductDetail({ refreshData, product, clearSelected }) {
         display_img: productImage,
       });
       if (res.status === 200) {
+        toast.success("Product updated successfully");
         console.log("Product updated successfully");
         refreshData();
       }
     } catch (error) {
+      toast.error(error?.response?.data?.message || "An error occurred");
       console.log(error);
     }
   };

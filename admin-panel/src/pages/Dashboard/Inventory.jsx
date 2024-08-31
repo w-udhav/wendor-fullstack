@@ -1,3 +1,4 @@
+import BulkAdd from "@/components/Inventory/BulkAdd";
 import InventoryDetail from "@/components/Inventory/InventoryDetail";
 import InventoryTable from "@/components/Inventory/InventoryTable";
 import AddInventoryModal from "@/components/Modal/AddInventoryModal";
@@ -39,8 +40,9 @@ export default function Inventory() {
       <div className="w-2/3 border-r border-zinc-800 h-full pl-4">
         {/* Top */}
         <div className="p-3 px-4 pl-0 w-full flex items-center justify-between border-b border-zinc-800 pb-4">
-          <div>
+          <div className="flex items-center gap-2">
             <AddInventoryModal refreshData={refreshData} />
+            <BulkAdd refreshData={refreshData} />
           </div>
           <div className="flex items-center gap-2">
             <h3 className="text-zinc-400">Count: </h3>

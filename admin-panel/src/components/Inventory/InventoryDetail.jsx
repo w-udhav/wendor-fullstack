@@ -5,6 +5,7 @@ import Input2 from "../Input2";
 
 import { axiosInstance } from "@/utils/axiosInstance";
 import { createInventory } from "@/utils/commonFunctions";
+import toast from "react-hot-toast";
 
 export default function InventoryDetail({
   refreshData,
@@ -26,10 +27,12 @@ export default function InventoryDetail({
         }
       );
       if (res.status === 200) {
+        toast.success("Product updated successfully");
         refreshData();
         console.log("Product updated successfully");
       }
     } catch (error) {
+      toast.error(error?.response?.data?.message || "An error occurred");
       console.log(error);
     }
   };
