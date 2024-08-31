@@ -12,7 +12,7 @@ Wendor allows admins to:
 
 - **Add Products:** Add products to the database including fields such as name, category, company and price.
 - **Add products to inventory:** Choose different products, add them to the inventory which will be reflected on the shoppers page.
-- **Manage Account and keep track of sales:** View and manage the sales and manage the admin profile.
+- **Manage Account and keep track of orders:** View and manage the orders
 
 ## Shopper Page Key Features
 
@@ -20,7 +20,6 @@ Wendor allows admins to:
 - **Products Listing:** Browse products page based on the selected category or search.
 - **Review Cart:** Add items you want to buy in the cart, review the cart and complete the order.
 - **Login/Signup:** Simple authentication with minimal fields.
-- **Forget/Reset password:** Forgot the password? You will receive a reset password link. You can navigate and reset the password.
 - **My Orders:** List review all the order for the logged-in user.
 
 ## Setup Instructions

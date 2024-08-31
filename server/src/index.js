@@ -13,7 +13,7 @@ app
   .use(express.urlencoded({ extended: true }))
   .use(
     cors({
-      origin: ["http://localhost:5173", "http://localhost:5174"],
+      origin: ["http://localhost:5173", "http://localhost:5174", "https://wendor-fullstack-client.vercel.app"],
       credentials: true,
     })
   )
