@@ -3,9 +3,11 @@ import { defaultProductImage } from "@/utils/constants";
 import React from "react";
 import Icon from "./Icon";
 import toast from "react-hot-toast";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProductCard({ data }) {
   const { cart, addToCart, updateCart } = useCart();
+  const { user } = useAuth();
 
   const cartItem = cart.find((item) => item.productId === data.productId);
 
@@ -46,34 +48,37 @@ export default function ProductCard({ data }) {
           <p className="text-zinc-700 font-medium">
             {data?.productName || "Name"}
           </p>
-          <div className="w-full flex items-center justify-between gap-2 pt-2">
+          <div className="w-full flex flex-col md:flex-row md:items-center justify-between gap-2 pt-2">
             <h2 className="text-xl font-medium  rounded-md flex-1">
               ₹ {data?.productPrice || "0.00"}{" "}
             </h2>
-            {cartItem ? (
-              <div className="flex items-center gap-4">
+            {user &&
+              (cartItem ? (
+                <div className="flex items-center gap-4 md:w-1/2">
+                  <button
+                    onClick={handleDecrement}
+                    className="bg-black rounded-md p-2 flex items-center justify-center flex-1 md:w-8 h-8"
+                  >
+                    <Icon name="remove" className="text-white text-sm" />
+                  </button>
+                  <div className="flex-1 font-semibold text-center md:w-10">
+                    {cartItem?.quantity}
+                  </div>
+                  <button
+                    onClick={handleIncrement}
+                    className="bg-black rounded-md p-2 flex items-center justify-center flex-1 w-8 h-8"
+                  >
+                    <Icon name="add" className="text-white text-xl" />
+                  </button>
+                </div>
+              ) : (
                 <button
-                  onClick={handleDecrement}
-                  className="bg-black rounded-md p-2 flex items-center justify-center w-8 h-8"
+                  onClick={handleAddToCart}
+                  className="bg-black text-white px-2 py-1 rounded-[3px] text-sm"
                 >
-                  <Icon name="remove" className="text-white text-sm" />
+                  <span>Add</span>
                 </button>
-                <div className="font-semibold">{cartItem?.quantity}</div>
-                <button
-                  onClick={handleIncrement}
-                  className="bg-black rounded-md p-2 flex items-center justify-center w-8 h-8"
-                >
-                  <Icon name="add" className="text-white text-xl" />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={handleAddToCart}
-                className="bg-black text-white px-2 py-1 rounded-[3px] text-sm"
-              >
-                <span>Add</span>
-              </button>
-            )}
+              ))}
           </div>
         </div>
       </div>

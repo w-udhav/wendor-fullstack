@@ -12,6 +12,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { axiosInstance } from "@/utils/axiosInstance";
 import Icon from "../Icon";
+import toast from "react-hot-toast";
 
 export default function LoginModal() {
   const { login, user, logout } = useAuth();
@@ -36,8 +37,10 @@ export default function LoginModal() {
       if (res.status === 200) {
         login(res?.data?.user, res?.data?.token);
         onOpenChange();
+        toast.success("Logged in successfully");
       }
     } catch (error) {
+      toast.error("Failed to login");
       console.error(error);
     }
   };
@@ -45,8 +48,9 @@ export default function LoginModal() {
   const handleLogout = () => {
     try {
       logout();
+      toast.success("Logged out successfully");
     } catch (error) {
-      console.log(error);
+      toast.error("Failed to logout");
     }
   };
 

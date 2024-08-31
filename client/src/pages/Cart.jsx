@@ -6,9 +6,11 @@ import Header from "@/components/Header";
 import { Spinner } from "@nextui-org/react";
 import { axiosInstance } from "@/utils/axiosInstance";
 import toast from "react-hot-toast";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Cart() {
   const { cart, updateCart, calculateCartValue, emptyCart } = useCart();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(0);
 
@@ -81,7 +83,7 @@ export default function Cart() {
 
               <button
                 onClick={handleOrder}
-                disabled={loading}
+                disabled={!user && loading}
                 className="bg-purple-500 h-11 text-white flex justify-center items-center px-4 py-2 rounded-md disabled:bg-gray-200 disabled:cursor-not-allowed"
               >
                 {loading ? (

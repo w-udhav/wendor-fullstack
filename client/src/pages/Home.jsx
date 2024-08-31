@@ -7,6 +7,7 @@ import ShopByCategory from "@/components/Home/ShopByCategory";
 import ProductCardCollection from "@/components/ProductCardCollection";
 import { axiosInstance } from "@/utils/axiosInstance";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const subheading =
   "Discover curated products, tailored just for you. Explore our collections and find exactly what you need, from essentials to exclusives.";
@@ -15,6 +16,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [randomProducts, setRandomProducts] = useState([]);
   const [underFiftyProducts, setUnderFiftyProducts] = useState([]);
+  const navigate = useNavigate();
 
   const fetchProducts = async () => {
     try {
@@ -41,10 +43,14 @@ export default function Home() {
     fetchProducts();
   }, []);
 
+  const handleCategoryClick = (category) => {
+    navigate(`/products?category=${category}`);
+  };
+
   return (
     <div className="flex flex-col gap-20">
       <Header heading="Home" subheading={subheading} />
-      <ShopByCategory />
+      <ShopByCategory handleCategoryClick={handleCategoryClick} />
       <ProductCardCollection title="Our Bestseller" products={randomProducts} />
       <ProductCardCollection title="Under ₹50" products={underFiftyProducts} />
     </div>

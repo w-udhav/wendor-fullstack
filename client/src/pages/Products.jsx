@@ -7,13 +7,17 @@ import { categories, sampleProducts } from "@/utils/constants";
 import Header from "@/components/Header";
 import ProductCardCollection from "@/components/ProductCardCollection";
 import toaster from "react-hot-toast";
+import { useSearchParams } from "react-router-dom";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+  const categoryQuery = searchParams.get("category") || "All";
 
   useEffect(() => {
     if (search.length > 0) {
@@ -30,13 +34,12 @@ export default function Products() {
     try {
       const res = await axiosInstance.get("/inventory");
       setProducts(res.data);
-      setFilteredProducts(res.data);
       const uniqueCategories = [
         ...new Set(res.data.map((product) => product.productCategory)),
       ];
       setCategories(uniqueCategories);
     } catch (error) {
-      toaster.error("Failed to fetch products");
+      console.error(error);
     }
   };
 
@@ -44,12 +47,31 @@ export default function Products() {
     fetchData();
   }, []);
 
-  const groupedProducts = categories.reduce((acc, category) => {
-    acc[category] = products.filter(
-      (product) => product.productCategory === category
-    );
-    return acc;
-  }, {});
+  useEffect(() => {
+    setSelectedCategory(categoryQuery);
+  }, [categoryQuery]);
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchParams({ search: value });
+  };
+
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      selectedCategory === "All" ||
+      product.productCategory === selectedCategory;
+    const matchesSearch = product.productName
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  // const groupedProducts = categories.reduce((acc, category) => {
+  //   acc[category] = products.filter(
+  //     (product) => product.productCategory === category
+  //   );
+  //   return acc;
+  // }, {});
 
   return (
     <div className="flex flex-col gap-20">
@@ -63,8 +85,8 @@ export default function Products() {
           type="text"
           className="p-2 max-w-sm w-full rounded-md border text-sm"
           placeholder="Search for products"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchQuery}
+          onChange={handleSearchChange}
         />
         <Select
           label="Filter"
@@ -80,21 +102,10 @@ export default function Products() {
           ))}
         </Select>
       </div>
-      {selectedCategory === "All" ? (
-        categories.map((category) => (
-          <ProductCardCollection
-            key={category}
-            title={category}
-            products={groupedProducts[category]}
-          />
-        ))
-      ) : (
-        <ProductCardCollection
-          key={selectedCategory}
-          title={selectedCategory}
-          products={groupedProducts[selectedCategory]}
-        />
-      )}
+      <ProductCardCollection
+        title={selectedCategory === "All" ? "All Products" : selectedCategory}
+        products={filteredProducts}
+      />
     </div>
   );
 }
