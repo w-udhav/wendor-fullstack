@@ -5,6 +5,8 @@ import Header from "@/components/Header";
 import { axiosInstance } from "@/utils/axiosInstance";
 import toaster from "react-hot-toast";
 import { Link } from "react-router-dom";
+import OrderCard from "@/components/MyOrders/OrderCard";
+import SectionHeading from "@/components/SectionHeading";
 
 export default function MyOrders() {
   const [orders, setOrders] = useState([]);
@@ -31,8 +33,6 @@ export default function MyOrders() {
     return acc;
   }, {});
 
-  console.log(groupedOrders);
-
   return (
     <div className="flex flex-col gap-20">
       <Header
@@ -43,19 +43,13 @@ export default function MyOrders() {
       <div className="w-full flex flex-col-reverse md:flex-row gap-5">
         <div className="w-full flex flex-col gap-1">
           {orders && orders.length > 0 ? (
-            Object.keys(groupedOrders).map((date) => (
-              <div key={date} className="mb-5">
-                <h2 className="text-xl font-semibold mb-2">{date}</h2>
-                <div className="flex flex-col gap-1">
-                  {groupedOrders[date].map((order) => {
-                    return order.products.map((product) => (
-                      <CartCard
-                        key={product?.productId}
-                        data={product}
-                        viewOnly
-                      />
-                    ));
-                  })}
+            Object.keys(groupedOrders).map((date, index) => (
+              <div key={index}>
+                <SectionHeading title={date} />
+                <div className="flex flex-col gap-2">
+                  {groupedOrders[date].map((order) => (
+                    <OrderCard key={order.id} order={order} />
+                  ))}
                 </div>
               </div>
             ))
