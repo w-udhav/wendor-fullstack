@@ -15,7 +15,6 @@ export default function CartCard({
   handleIncrement,
   handleDecrement,
 }) {
-  console.log(data);
   return (
     <div className="max-w-screen-md border bg-zinc-50 rounded-md">
       <div className="flex items-center gap-4 p-2">

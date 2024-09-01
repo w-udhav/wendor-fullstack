@@ -9,6 +9,5 @@ export const registerUser = async (data) => {
     email: data.email,
     password: data.password,
   });
-  console.log(res);
   return { data: res.data, status: res.status };
 };

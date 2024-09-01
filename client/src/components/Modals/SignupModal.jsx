@@ -37,8 +37,6 @@ export default function SignupModal({ isOpen, onOpenChange }) {
     }
   };
 
-  console.log(user, loading);
-
   return (
     <Modal isOpen={isOpen} onClose={() => onOpenChange(false)}>
       <ModalContent>

@@ -18,7 +18,6 @@ export default function Cart() {
     setLoading(true);
     try {
       const res = await axiosInstance.post("/orders/create", cart);
-      console.log(res);
     } catch (error) {
       toast.error("Something went wrong");
     }
