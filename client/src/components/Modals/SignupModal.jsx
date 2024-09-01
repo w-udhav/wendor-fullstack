@@ -12,9 +12,8 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { registerUser } from "@/utils/api";
 
-export default function SignupModal() {
+export default function SignupModal({ isOpen, onOpenChange }) {
   const { login, loading, user, logout } = useAuth();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [formData, setFormData] = React.useState({
     fullName: "",
     email: "",
@@ -38,107 +37,51 @@ export default function SignupModal() {
     }
   };
 
-  const handleLogout = () => {
-    try {
-      logout();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   console.log(user, loading);
 
   return (
-    <>
-      {!user ? (
-        <Button color="primary" variant="flat" onPress={onOpen}>
-          Login
-        </Button>
-      ) : (
-        <Button color="danger" variant="flat" onPress={handleLogout}>
-          Logout
-        </Button>
-      )}
-
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Login</ModalHeader>
-              <ModalBody>
-                <Input
-                  label="Full Name"
-                  type="text"
-                  name="fullName"
-                  variant="flat"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                />
-                <Input
-                  label="Email"
-                  type="email"
-                  name="email"
-                  variant="flat"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                <Input
-                  label="Password"
-                  type="password"
-                  name="password"
-                  variant="flat"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="flat" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={handleCreate}>
-                  Create
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Login</ModalHeader>
-              <ModalBody>
-                <Input
-                  label="Email"
-                  type="email"
-                  name="email"
-                  variant="flat"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                <Input
-                  label="Password"
-                  type="password"
-                  name="password"
-                  variant="flat"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="flat" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={handleCreate}>
-                  Create
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal isOpen={isOpen} onClose={() => onOpenChange(false)}>
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col gap-1">Login</ModalHeader>
+            <ModalBody>
+              <Input
+                label="Full Name"
+                type="text"
+                name="fullName"
+                variant="flat"
+                value={formData.fullName}
+                onChange={handleChange}
+              />
+              <Input
+                label="Email"
+                type="email"
+                name="email"
+                variant="flat"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              <Input
+                label="Password"
+                type="password"
+                name="password"
+                variant="flat"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button color="default" variant="flat" onPress={onClose}>
+                Close
+              </Button>
+              <Button color="primary" onPress={handleCreate}>
+                Sign Up
+              </Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
   );
 }

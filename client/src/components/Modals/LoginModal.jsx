@@ -13,10 +13,18 @@ import { useAuth } from "@/context/AuthContext";
 import { axiosInstance } from "@/utils/axiosInstance";
 import Icon from "../Icon";
 import toast from "react-hot-toast";
+import SignupModal from "./SignupModal";
 
 export default function LoginModal() {
   const { login, user, logout } = useAuth();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isSignUpClicked, setIsSignUpClicked] = React.useState(false);
+
+  useEffect(() => {
+    if (isSignUpClicked) {
+      onOpenChange();
+    }
+  }, [isSignUpClicked]);
 
   const [formData, setFormData] = React.useState({
     email: "",
@@ -95,6 +103,12 @@ export default function LoginModal() {
                   value={formData.password}
                   onChange={handleChange}
                 />
+                <button
+                  onClick={() => setIsSignUpClicked(true)}
+                  className="text-sm text-left"
+                >
+                  Don't have an account?
+                </button>
               </ModalBody>
               <ModalFooter>
                 <Button color="default" variant="flat" onPress={onClose}>
@@ -108,6 +122,8 @@ export default function LoginModal() {
           )}
         </ModalContent>
       </Modal>
+
+      <SignupModal isOpen={isSignUpClicked} onOpenChange={setIsSignUpClicked} />
     </>
   );
 }
