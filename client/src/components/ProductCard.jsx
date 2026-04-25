@@ -3,11 +3,9 @@ import { defaultProductImage } from "@/utils/constants";
 import React from "react";
 import Icon from "./Icon";
 import toast from "react-hot-toast";
-import { useAuth } from "@/context/AuthContext";
 
 export default function ProductCard({ data }) {
   const { cart, addToCart, updateCart } = useCart();
-  const { user } = useAuth();
 
   const cartItem = cart.find((item) => item.productId === data.productId);
 
@@ -52,8 +50,7 @@ export default function ProductCard({ data }) {
             <h2 className="text-xl font-medium  rounded-md flex-1">
               ₹ {data?.productPrice || "0.00"}{" "}
             </h2>
-            {user &&
-              (cartItem ? (
+            {cartItem ? (
                 <div className="flex items-center gap-4 md:w-1/2">
                   <button
                     onClick={handleDecrement}
@@ -78,7 +75,7 @@ export default function ProductCard({ data }) {
                 >
                   <span>Add</span>
                 </button>
-              ))}
+              )}
           </div>
         </div>
       </div>

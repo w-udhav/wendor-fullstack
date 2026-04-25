@@ -1,39 +1,59 @@
 import { useCart } from "@/context/CartContext";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import CartCard from "@/components/CartCard";
 import Header from "@/components/Header";
 import { Spinner } from "@nextui-org/react";
 import { axiosInstance } from "@/utils/axiosInstance";
 import toast from "react-hot-toast";
-import { useAuth } from "@/context/AuthContext";
 
 export default function Cart() {
   const { cart, updateCart, calculateCartValue, emptyCart } = useCart();
-  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [timer, setTimer] = useState(0);
+  const navigate = useNavigate();
+
+  const saveOrderToHistory = () => {
+    const cached = localStorage.getItem("orderHistory");
+    let history = [];
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Date.now() - parsed.timestamp < 30 * 60 * 1000) {
+        history = parsed.orders;
+      }
+    }
+    const order = {
+      id: crypto.randomUUID(),
+      orderTotal: calculateCartValue,
+      createdAt: new Date().toISOString(),
+      products: cart.map((item) => ({
+        name: item.productName,
+        quantity: item.quantity,
+        purchasePrice: item.productPrice,
+        display_img: item.display_img,
+      })),
+    };
+    history.unshift(order);
+    localStorage.setItem(
+      "orderHistory",
+      JSON.stringify({ orders: history, timestamp: Date.now() })
+    );
+  };
 
   const handleOrder = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.post("/orders/create", cart);
+      await axiosInstance.post("/orders/create", cart);
+      saveOrderToHistory();
+      toast.success("Order placed successfully!");
+      emptyCart();
+      navigate("/history");
     } catch (error) {
       toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
-    setTimer(
-      setTimeout(() => {
-        emptyCart();
-        setLoading(false);
-      }, 3000)
-    );
   };
-
-  useEffect(() => {
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [timer]);
 
   return (
     <div className="flex flex-col gap-20">
@@ -82,7 +102,7 @@ export default function Cart() {
 
               <button
                 onClick={handleOrder}
-                disabled={!user && loading}
+                disabled={loading}
                 className="bg-purple-500 h-11 text-white flex justify-center items-center px-4 py-2 rounded-md disabled:bg-gray-200 disabled:cursor-not-allowed"
               >
                 {loading ? (

@@ -1,8 +1,7 @@
-import { Input, Select, SelectItem } from "@nextui-org/react";
+import { Input, Select, SelectItem, Spinner } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 
 import { axiosInstance } from "@/utils/axiosInstance";
-import { categories, sampleProducts } from "@/utils/constants";
 
 import Header from "@/components/Header";
 import ProductCardCollection from "@/components/ProductCardCollection";
@@ -14,6 +13,7 @@ export default function Products() {
   const [search, setSearch] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [loading, setLoading] = useState(true);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
@@ -40,6 +40,8 @@ export default function Products() {
       setCategories(uniqueCategories);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -102,10 +104,16 @@ export default function Products() {
           ))}
         </Select>
       </div>
-      <ProductCardCollection
-        title={selectedCategory === "All" ? "All Products" : selectedCategory}
-        products={filteredProducts}
-      />
+      {loading ? (
+        <div className="w-full flex items-center justify-center h-40">
+          <Spinner color="secondary" size="lg" />
+        </div>
+      ) : (
+        <ProductCardCollection
+          title={selectedCategory === "All" ? "All Products" : selectedCategory}
+          products={filteredProducts}
+        />
+      )}
     </div>
   );
 }

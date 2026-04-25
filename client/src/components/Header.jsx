@@ -39,7 +39,6 @@ export default function Header({ heading, subheading }) {
         <div className="flex justify-between gap-2">
           <h1 className="text-4xl md:text-5xl font-extrabold">{heading}</h1>
           <div className="flex items-center gap-3">
-            {user && (
               <div className="relative">
                 <Link to="/cart" className="pt-2">
                   <Icon name="shopping_cart" />
@@ -50,7 +49,6 @@ export default function Header({ heading, subheading }) {
                   </div>
                 )}
               </div>
-            )}
             <LoginModal />
           </div>
         </div>

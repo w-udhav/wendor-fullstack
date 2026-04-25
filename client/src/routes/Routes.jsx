@@ -8,6 +8,7 @@ import MyOrders from "@/pages/MyOrders";
 import Products from "@/pages/Products";
 import Layout from "@/components/Layout/Layout";
 import Cart from "@/pages/Cart";
+import History from "@/pages/History";
 import Navbar from "@/components/Navbar";
 
 const AppRoutes = () => {
@@ -18,9 +19,10 @@ const AppRoutes = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/history" element={<History />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/myorders" element={<MyOrders />} />
-            <Route path="/cart" element={<Cart />} />
           </Route>
         </Routes>
       </Layout>

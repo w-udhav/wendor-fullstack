@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifyUser } from "../middlewares/auth.js";
+import { verifyUser, optionalAuth } from "../middlewares/auth.js";
 import OrderController from "../controllers/orderController.js";
 
 const router = Router();
@@ -12,7 +12,7 @@ router.get(
 );
 router.post(
     "/create",
-    verifyUser,
+    optionalAuth,
     orderController.createOrder.bind(orderController)
 );
 

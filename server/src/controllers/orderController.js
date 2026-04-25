@@ -16,7 +16,7 @@ class OrderController {
     });
 
     createOrder = asyncHandler(async (req, res, next) => {
-        const order = await this.orderService.create(req.user.id, req.body);
+        const order = await this.orderService.create(req.user?.id || null, req.body);
         res.status(201).json({ data: order });
     });
 }
