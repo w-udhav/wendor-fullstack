@@ -1,4 +1,4 @@
-# Wendor
+# E Commerce
 
 ## Overview
 This project is a full-stack web application designed to provide a seamless shopping experience. It features both a frontend and a backend, handling everything from product display and shopping cart management to admin operations like product management and order tracking. The project is built with modern web development technologies, ensuring a responsive, efficient, and secure application.
